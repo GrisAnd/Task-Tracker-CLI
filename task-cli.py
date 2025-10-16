@@ -11,16 +11,18 @@ def main():
         print("Enter a valid number of arguments")
 
     if sys.argv[1] == "add":
-        add_task()
+        add_new_task()
     elif sys.argv[1] == "list":
         list_all_tasks()
     elif sys.argv[1] == "update":
-        update_task()
+        update_task_description()
+    elif sys.argv[1] == "mark-done" or sys.argv[1] == "mark-in-progress" or sys.argv[1] == "mark-todo":
+        update_task_status()
     else:
         print("Enter a valid argument")
 
 
-def add_task():
+def add_new_task():
 
     with open(file_path, 'r') as file:
         data = json.load(file)
@@ -60,19 +62,16 @@ def list_all_tasks():
         i += 1
 
 
-def update_task():
+def update_task_description():
 
     with open(file_path, 'r') as file:
         data = json.load(file)
 
     task_id = int(sys.argv[2])
     updatedAt = datetime.now().strftime("%m/%d/%Y")
-    max_tasks_id = data['tasks'][-1]['id']
+    max_tasks_id = int(data['tasks'][-1]['id'])
 
-    if task_id > max_tasks_id or task_id == 0:
-        print("Enter a valid task ID")
-    else:
-
+    if task_id <= max_tasks_id and task_id != 0:
         data['tasks'][task_id]['description'] = sys.argv[3]
         data['tasks'][task_id]['updatedAt'] = updatedAt
 
@@ -80,6 +79,38 @@ def update_task():
             json.dump(data, file, indent=2)
 
         print(f"Task updated successfully (ID: {task_id})")
+    else: 
+        print("Enter a valid task ID")
+
+
+def update_task_status():
+    
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+
+    task_id = int(sys.argv[2])
+    updatedAt = datetime.now().strftime("%m/%d/%Y")
+    max_tasks_id = int(data['tasks'][-1]['id'])
+    status_done, status_inprogress, status_todo = "done", "in-progress", "todo"
+
+    if task_id <= max_tasks_id and task_id != 0:
+        if sys.argv[1] == "mark-done":
+            data['tasks'][task_id]['status'] = status_done
+            data['tasks'][task_id]['updatedAt'] = updatedAt
+        elif sys.argv[1] == "mark-in-progress":
+            data['tasks'][task_id]['status'] = status_inprogress
+            data['tasks'][task_id]['updatedAt'] = updatedAt
+        elif sys.argv[1] == "mark-todo":
+            data['tasks'][task_id]['status'] = status_todo
+            data['tasks'][task_id]['updatedAt'] = updatedAt
+
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=2)
+
+        print(f"Status updated successfully (ID: {task_id})")
+
+    else:
+        print("Enter a valid task ID")
 
 
 if __name__ == "__main__":
