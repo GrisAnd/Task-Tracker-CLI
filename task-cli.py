@@ -18,6 +18,8 @@ def main():
         update_task_description()
     elif sys.argv[1] == "mark-done" or sys.argv[1] == "mark-in-progress" or sys.argv[1] == "mark-todo":
         update_task_status()
+    elif sys.argv[1]:
+        delete_task()
     else:
         print("Enter a valid argument")
 
@@ -109,6 +111,31 @@ def update_task_status():
 
         print(f"Status updated successfully (ID: {task_id})")
 
+    else:
+        print("Enter a valid task ID")
+
+
+def delete_task():
+    
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+
+    task_id = int(sys.argv[2])
+    max_task_id = int(data['tasks'][-1]['id'])
+
+    if task_id <= max_task_id and task_id != 0:
+        data['tasks'].pop(task_id)
+
+        i = 1
+        while i < max_task_id:
+            max_task_id = int(data['tasks'][-1]['id'])
+            data['tasks'][i]['id'] = data['tasks'].index(data['tasks'][i])
+            i += 1
+
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=2)
+
+        print(f"Successfully deleted task (ID: {task_id})")
     else:
         print("Enter a valid task ID")
 
