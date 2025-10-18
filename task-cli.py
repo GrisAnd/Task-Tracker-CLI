@@ -13,12 +13,19 @@ def main():
     if sys.argv[1] == "add":
         add_new_task()
     elif sys.argv[1] == "list":
-        list_all_tasks()
+        if sys.argv[-1] == "done":
+            list_done_tasks()
+        elif sys.argv[-1] == "todo":
+            list_todo_tasks()
+        elif sys.argv[-1] == "in-progress":
+            list_in_progress_tasks()
+        else:
+            list_all_tasks()
     elif sys.argv[1] == "update":
         update_task_description()
     elif sys.argv[1] == "mark-done" or sys.argv[1] == "mark-in-progress" or sys.argv[1] == "mark-todo":
         update_task_status()
-    elif sys.argv[1]:
+    elif sys.argv[1] == "delete":
         delete_task()
     else:
         print("Enter a valid argument")
@@ -60,7 +67,11 @@ def list_all_tasks():
     i = 1
 
     while i <= task_number:
-        print(data['tasks'][i])
+        print(f"ID: {data['tasks'][i]['id']}")
+        print(f"Description: {data['tasks'][i]['description']}")
+        print(f"Status: {data['tasks'][i]['status']}")
+        print(f"Created At: {data['tasks'][i]['createdAt']}")
+        print(f"Updated At: {data['tasks'][i]['updatedAt']}\n")
         i += 1
 
 
@@ -138,6 +149,58 @@ def delete_task():
         print(f"Successfully deleted task (ID: {task_id})")
     else:
         print("Enter a valid task ID")
+
+
+def list_done_tasks():
+
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+
+    max_task_id = data['tasks'][-1]['id']
+    
+    i = 1
+    while i <= max_task_id:
+        if data['tasks'][i]['status'] == "done":
+            print(f"ID: {data['tasks'][i]['id']}")
+            print(f"Description: {data['tasks'][i]['description']}")
+            print(f"Status: {data['tasks'][i]['status']}")
+            print(f"Created At: {data['tasks'][i]['createdAt']}")
+            print(f"Updated At: {data['tasks'][i]['updatedAt']}\n")
+        i += 1
+
+
+def list_todo_tasks():
+
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+
+    max_task_id = data['tasks'][-1]['id']
+    
+    i = 1
+    while i <= max_task_id:
+        if data['tasks'][i]['status'] == "todo":
+            print(f"ID: {data['tasks'][i]['id']}")
+            print(f"Description: {data['tasks'][i]['description']}")
+            print(f"Status: {data['tasks'][i]['status']}")
+            print(f"Created At: {data['tasks'][i]['createdAt']}")
+            print(f"Updated At: {data['tasks'][i]['updatedAt']}\n")
+        i += 1
+
+def list_in_progress_tasks():
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+
+    max_task_id = data['tasks'][-1]['id']
+    
+    i = 1
+    while i <= max_task_id:
+        if data['tasks'][i]['status'] == "in-progress":
+            print(f"ID: {data['tasks'][i]['id']}")
+            print(f"Description: {data['tasks'][i]['description']}")
+            print(f"Status: {data['tasks'][i]['status']}")
+            print(f"Created At: {data['tasks'][i]['createdAt']}")
+            print(f"Updated At: {data['tasks'][i]['updatedAt']}\n")
+        i += 1
 
 
 if __name__ == "__main__":
