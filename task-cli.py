@@ -3,7 +3,7 @@ import json
 import os
 from datetime import datetime
 
-file_path = "tasks/tasks.json"
+file_path = "tasks.json"
 
 
 def main():
@@ -29,7 +29,7 @@ def main():
             
             with open(file_path, 'w') as file:
                 json.dump(data, file, indent=2)
-                
+
             add_new_task()
     elif sys.argv[1] == "list":
         if sys.argv[-1] == "done":
