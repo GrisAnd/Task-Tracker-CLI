@@ -1,5 +1,6 @@
 import sys
 import json
+import os
 from datetime import datetime
 
 file_path = "tasks/tasks.json"
@@ -11,7 +12,25 @@ def main():
         print("Enter a valid number of arguments")
 
     if sys.argv[1] == "add":
-        add_new_task()
+        if os.path.exists(file_path):
+            add_new_task()
+        else:
+            data = {
+                "tasks": [
+                    {
+                    "id": 0,
+                    "description": "",
+                    "status": "",
+                    "createdAt": "",
+                    "updatedAt": ""
+                    }
+                ]
+                }
+            
+            with open(file_path, 'w') as file:
+                json.dump(data, file, indent=2)
+                
+            add_new_task()
     elif sys.argv[1] == "list":
         if sys.argv[-1] == "done":
             list_done_tasks()
