@@ -1,6 +1,6 @@
 # README
 Simple Task tracker project, based in CLI (Command Line Interface)
-[text](https://github.com/GrisAnd/Task-Tracker-CLI)
+[Task-Tracker-CLI](https://github.com/GrisAnd/Task-Tracker-CLI)
 
 ## Add:
 python3 task-cli.py add "**task description**"
